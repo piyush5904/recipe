@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recipe Finder | Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .view { display: none; animation: fadeIn 0.3s; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+
+<div id="app">
+
+  <!-- Login View -->
+  <section id="login-view" class="view min-h-screen flex justify-center items-center bg-gray-100">
+    <div class="w-full max-w-md bg-white p-6 rounded-xl shadow-md">
+      <h2 class="text-2xl font-bold mb-4 text-center text-blue-600">Recipe Finder</h2>
+      <p class="text-sm text-gray-500 mb-2 text-center">Login with the credentials below:</p>
+      <div class="text-xs bg-gray-100 p-2 mb-4 rounded text-gray-600">
+        <p><b>User:</b> user@recipe.com</p>
+        <p><b>Admin:</b> admin@recipe.com</p>
+        <p><b>Password:</b> password</p>
+      </div>
+      <form id="login-form">
+        <div id="login-error" class="hidden bg-red-100 text-red-700 p-2 mb-4 rounded text-sm">Invalid credentials.</div>
+        <input type="email" id="email" placeholder="Email" class="w-full mb-3 p-2 border border-gray-300 rounded" required>
+        <input type="password" id="password" placeholder="Password" class="w-full mb-4 p-2 border border-gray-300 rounded" required>
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Dashboard View -->
+  <section id="dashboard-view" class="view p-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Recipe Dashboard</h1>
+      <div>
+        <span class="mr-4 text-gray-600">Welcome, <span class="font-semibold" id="username-display">User</span></span>
+        <button onclick="logout()" class="text-blue-600 hover:underline">Logout</button>
+      </div>
+    </div>
+    <button onclick="showView('create-recipe-view')" class="mb-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Add New Recipe</button>
+    <div id="recipe-list" class="grid md:grid-cols-2 gap-4">
+      <!-- Recipes will be loaded here -->
+    </div>
+  </section>
+
+  <!-- Create Recipe View -->
+  <section id="create-recipe-view" class="view p-4">
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Add a New Recipe</h2>
+        <button onclick="showView('dashboard-view')" class="text-blue-600 hover:underline">Back</button>
+      </div>
+      <form id="recipe-form">
+        <input id="recipe-title" placeholder="Recipe Title" class="w-full mb-3 p-2 border border-gray-300 rounded" required>
+        <input id="recipe-ingredients" placeholder="Ingredients (comma separated)" class="w-full mb-3 p-2 border border-gray-300 rounded" required>
+        <textarea id="recipe-steps" placeholder="Preparation Steps" class="w-full mb-3 p-2 border border-gray-300 rounded" rows="4" required></textarea>
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Submit</button>
+      </form>
+    </div>
+  </section>
+
+</div>
+
+<!-- JavaScript Logic -->
+<script>
+  const users = [
+    { email: "user@recipe.com", password: "password", name: "Regular User", role: "user" },
+    { email: "admin@recipe.com", password: "password", name: "Admin", role: "admin" }
+  ];
+
+  let currentUser = null;
+  let recipes = [
+    { title: "Paneer Butter Masala", ingredients: ["Paneer", "Tomato", "Cream"], steps: "Cook everything and serve hot." },
+    { title: "Veg Pulao", ingredients: ["Rice", "Vegetables", "Spices"], steps: "Mix and cook until rice is soft." }
+  ];
+
+  function showView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+    document.getElementById(viewId).style.display = 'block';
+  }
+
+  function logout() {
+    currentUser = null;
+    showView('login-view');
+  }
+
+  function renderRecipes() {
+    const list = document.getElementById('recipe-list');
+    list.innerHTML = '';
+    recipes.forEach(r => {
+      list.innerHTML += `
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-semibold">${r.title}</h3>
+          <p class="text-sm text-gray-600"><b>Ingredients:</b> ${r.ingredients.join(', ')}</p>
+          <p class="text-sm mt-2">${r.steps}</p>
+        </div>
+      `;
+    });
+  }
+
+  // Login Handler
+  document.getElementById('login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const error = document.getElementById('login-error');
+
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+      currentUser = user;
+      document.getElementById('username-display').textContent = user.name;
+      error.classList.add('hidden');
+      renderRecipes();
+      showView('dashboard-view');
+    } else {
+      error.classList.remove('hidden');
+    }
+  });
+
+  // Recipe Submission
+  document.getElementById('recipe-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const title = document.getElementById('recipe-title').value.trim();
+    const ingredients = document.getElementById('recipe-ingredients').value.split(',').map(i => i.trim());
+    const steps = document.getElementById('recipe-steps').value.trim();
+
+    recipes.unshift({ title, ingredients, steps });
+    document.getElementById('recipe-form').reset();
+    renderRecipes();
+    showView('dashboard-view');
+  });
+
+  // Initial view
+  document.addEventListener('DOMContentLoaded', () => {
+    showView('login-view');
+  });
+</script>
+</body>
+</html>
