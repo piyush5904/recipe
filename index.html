@@ -14,9 +14,9 @@
 <body class="text-gray-800 min-h-screen">
 
   <!-- Header -->
-  <header class="bg-white shadow-md p-4 text-center">
-    <h1 class="text-3xl font-bold text-blue-600">Recipe Finder</h1>
-    <p class="text-sm text-gray-500">Search for recipes by name or ingredients</p>
+  <header class="bg-white shadow-md p-6 text-center">
+    <h1 class="text-4xl font-bold text-blue-600">Recipe Finder</h1>
+    <p class="text-sm text-gray-500 mt-1">Search your favorite recipes by name or ingredients</p>
   </header>
 
   <!-- Search Box -->
@@ -30,32 +30,72 @@
   </div>
 
   <!-- Recipe List -->
-  <div id="recipe-list" class="grid md:grid-cols-2 gap-4 p-4 max-w-5xl mx-auto">
+  <div id="recipe-list" class="grid md:grid-cols-2 gap-4 p-4 max-w-6xl mx-auto">
     <!-- Recipes will be added here by JS -->
   </div>
 
-  <!-- JS -->
+  <!-- JavaScript -->
   <script>
     const recipes = [
       {
         title: "Paneer Butter Masala",
-        ingredients: ["paneer", "tomato", "cream", "spices"],
-        steps: "Cook paneer in creamy tomato gravy with spices.",
+        ingredients: ["paneer", "tomato", "cream", "spices", "butter"],
+        steps: "Cook paneer in buttery tomato gravy with cream and spices.",
       },
       {
         title: "Veg Biryani",
-        ingredients: ["rice", "vegetables", "spices"],
-        steps: "Cook rice and vegetables with layered spices.",
+        ingredients: ["rice", "vegetables", "spices", "yogurt", "mint"],
+        steps: "Layer rice and vegetables cooked with spices and herbs.",
       },
       {
         title: "Aloo Paratha",
-        ingredients: ["potato", "flour", "spices"],
-        steps: "Stuff spiced mashed potatoes in dough and roast.",
+        ingredients: ["potato", "flour", "spices", "coriander", "onion"],
+        steps: "Stuff mashed spiced potatoes into dough and roast with ghee.",
       },
       {
         title: "Masala Dosa",
-        ingredients: ["rice", "urad dal", "potato", "onion"],
-        steps: "Make crispy dosa filled with potato masala.",
+        ingredients: ["rice", "urad dal", "potato", "onion", "mustard seeds"],
+        steps: "Make dosa batter, cook crispy, and fill with potato masala.",
+      },
+      {
+        title: "Chole Bhature",
+        ingredients: ["chickpeas", "flour", "spices", "yogurt", "onion"],
+        steps: "Boil chickpeas and cook in spicy curry. Serve with fried bread.",
+      },
+      {
+        title: "Palak Paneer",
+        ingredients: ["spinach", "paneer", "onion", "garlic", "spices"],
+        steps: "Puree spinach and cook with spices. Add paneer cubes.",
+      },
+      {
+        title: "Idli Sambhar",
+        ingredients: ["rice", "dal", "vegetables", "tamarind", "spices"],
+        steps: "Steam fermented batter to make idlis and serve with sambhar.",
+      },
+      {
+        title: "Rajma Chawal",
+        ingredients: ["kidney beans", "rice", "onion", "tomato", "spices"],
+        steps: "Cook kidney beans in onion-tomato masala and serve with rice.",
+      },
+      {
+        title: "Pav Bhaji",
+        ingredients: ["potato", "capsicum", "peas", "onion", "butter"],
+        steps: "Mash boiled vegetables with spices and serve with buttered pav.",
+      },
+      {
+        title: "Kadai Mushroom",
+        ingredients: ["mushroom", "capsicum", "tomato", "onion", "spices"],
+        steps: "Stir-fry mushrooms with bell peppers and onion-tomato masala.",
+      },
+      {
+        title: "Upma",
+        ingredients: ["semolina", "mustard seeds", "onion", "vegetables", "ghee"],
+        steps: "Roast semolina and cook with sautéed vegetables and spices.",
+      },
+      {
+        title: "Dhokla",
+        ingredients: ["besan", "curd", "mustard seeds", "hing", "green chili"],
+        steps: "Steam fermented besan batter and temper with mustard seeds.",
       }
     ];
 
@@ -68,10 +108,10 @@
       }
       recipeArray.forEach((recipe) => {
         list.innerHTML += `
-          <div class="bg-white rounded-xl p-4 shadow">
-            <h2 class="text-xl font-semibold text-blue-600">${recipe.title}</h2>
-            <p class="text-sm text-gray-600"><b>Ingredients:</b> ${recipe.ingredients.join(", ")}</p>
-            <p class="mt-2 text-sm">${recipe.steps}</p>
+          <div class="bg-white rounded-xl p-5 shadow-md border hover:shadow-lg transition">
+            <h2 class="text-xl font-bold text-blue-700 mb-1">${recipe.title}</h2>
+            <p class="text-sm text-gray-600 mb-2"><b>Ingredients:</b> ${recipe.ingredients.join(", ")}</p>
+            <p class="text-sm"><b>Steps:</b> ${recipe.steps}</p>
           </div>`;
       });
     }
