@@ -1,3 +1,4 @@
+<!-- Full enhanced version of your Recipe Finder -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,12 +58,13 @@
       border-radius: 10px;
       padding: 1rem;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
     }
 
     .recipe-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     }
 
     .recipe-card img {
@@ -78,8 +80,9 @@
     }
 
     .recipe-card .tags {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #777;
+      margin-top: 4px;
     }
 
     .modal {
@@ -93,18 +96,45 @@
 
     .modal-content {
       background: #fff;
-      margin: 10% auto;
-      padding: 20px;
+      margin: 5% auto;
+      padding: 25px;
       max-width: 600px;
       border-radius: 10px;
       position: relative;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.9);}
+      to {opacity: 1; transform: scale(1);}
     }
 
     .close {
       position: absolute;
-      top: 10px; right: 20px;
-      font-size: 24px;
+      top: 10px;
+      right: 20px;
+      font-size: 26px;
       cursor: pointer;
+      color: #666;
+    }
+
+    .close:hover {
+      color: #d97706;
+    }
+
+    .modal-content h2 {
+      color: #d97706;
+      margin-bottom: 12px;
+    }
+
+    .modal-content ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .modal-content p {
+      margin-top: 10px;
+      line-height: 1.6;
     }
 
     @media (max-width: 600px) {
@@ -140,8 +170,10 @@
       <div class="modal-content">
         <span id="closeBtn" class="close">&times;</span>
         <h2 id="modalTitle"></h2>
-        <p><strong>Ingredients:</strong> <span id="modalIngredients"></span></p>
-        <p><strong>Instructions:</strong> <span id="modalInstructions"></span></p>
+        <p><strong>Ingredients:</strong></p>
+        <ul id="modalIngredients"></ul>
+        <p><strong>Instructions:</strong></p>
+        <p id="modalInstructions"></p>
       </div>
     </div>
   </div>
@@ -150,73 +182,45 @@
     const recipes = [
       {
         title: "Butter Chicken",
-        ingredients: ["chicken", "butter", "tomato", "cream", "spices"],
-        instructions: "Cook chicken in butter and tomato gravy. Add cream and simmer.",
+        ingredients: ["500g chicken", "2 tbsp butter", "1 cup tomato puree", "1/2 cup cream", "garam masala", "salt"],
+        instructions: "Marinate chicken in yogurt and spices. Sauté in butter. Add tomato puree and simmer. Stir in cream and garam masala before serving.",
         image: "https://source.unsplash.com/400x300/?butter-chicken",
         tags: "North Indian, Non-Veg, Spicy"
       },
       {
         title: "Palak Paneer",
-        ingredients: ["spinach", "paneer", "garlic", "onion", "cream"],
-        instructions: "Blend spinach, cook with spices, and add paneer cubes.",
+        ingredients: ["200g paneer", "2 cups spinach", "1 onion", "2 garlic cloves", "1/4 cup cream", "spices"],
+        instructions: "Blanch and blend spinach. Fry onions and garlic, add spinach puree and spices. Add paneer cubes, simmer, and finish with cream.",
         image: "https://source.unsplash.com/400x300/?palak-paneer",
         tags: "North Indian, Veg"
       },
       {
         title: "Masala Dosa",
-        ingredients: ["rice", "urad dal", "potato", "mustard seeds", "curry leaves"],
-        instructions: "Make dosa batter, cook dosas, fill with spicy mashed potato.",
+        ingredients: ["2 cups dosa batter", "2 potatoes", "mustard seeds", "curry leaves", "turmeric", "onion"],
+        instructions: "Cook mashed potatoes with tempered spices. Spread on crispy dosa and serve with chutney and sambar.",
         image: "https://source.unsplash.com/400x300/?masala-dosa",
         tags: "South Indian, Breakfast, Veg"
       },
       {
-        title: "Chole Bhature",
-        ingredients: ["chickpeas", "tomato", "ginger", "flour", "yogurt"],
-        instructions: "Cook spicy chickpeas curry. Serve with deep-fried bhature.",
-        image: "https://source.unsplash.com/400x300/?chole-bhature",
-        tags: "North Indian, Street Food, Spicy, Veg"
-      },
-      {
         title: "Biryani",
-        ingredients: ["basmati rice", "meat", "onion", "spices", "yogurt"],
-        instructions: "Layer cooked rice and meat masala, then dum-cook together.",
+        ingredients: ["2 cups basmati rice", "250g chicken/mutton", "onions", "spices", "curd", "mint"],
+        instructions: "Layer par-cooked rice over marinated meat. Cook on dum for 20-30 mins. Serve with raita.",
         image: "https://source.unsplash.com/400x300/?biryani",
         tags: "Hyderabadi, Mughlai, Non-Veg, Spicy"
       },
       {
         title: "Rajma Chawal",
-        ingredients: ["kidney beans", "onion", "tomato", "spices", "rice"],
-        instructions: "Cook rajma in onion-tomato gravy. Serve with steamed rice.",
+        ingredients: ["1 cup kidney beans", "tomatoes", "onions", "spices", "boiled rice"],
+        instructions: "Pressure cook rajma, sauté masala base, mix and simmer. Serve hot with rice.",
         image: "https://source.unsplash.com/400x300/?rajma-chawal",
         tags: "North Indian, Veg"
       },
       {
-        title: "Poha",
-        ingredients: ["flattened rice", "mustard seeds", "onion", "green chili", "lemon"],
-        instructions: "Soften poha, sauté with tempering and vegetables.",
-        image: "https://source.unsplash.com/400x300/?poha,indian-breakfast",
-        tags: "Maharashtrian, Breakfast, Veg"
-      },
-      {
         title: "Sambar",
-        ingredients: ["toor dal", "vegetables", "tamarind", "mustard seeds", "sambar powder"],
-        instructions: "Cook dal with vegetables and sambar spices.",
+        ingredients: ["1 cup toor dal", "vegetables", "tamarind", "sambar powder", "mustard seeds"],
+        instructions: "Boil dal and veggies. Add tamarind and spices. Finish with mustard seed tadka.",
         image: "https://source.unsplash.com/400x300/?sambar",
         tags: "South Indian, Veg"
-      },
-      {
-        title: "Pav Bhaji",
-        ingredients: ["potato", "capsicum", "peas", "onion", "bhaji masala"],
-        instructions: "Mash vegetables and cook with spices. Serve with buttered pav.",
-        image: "https://source.unsplash.com/400x300/?pav-bhaji",
-        tags: "Street Food, Veg, Spicy"
-      },
-      {
-        title: "Idli Sambar",
-        ingredients: ["rice", "urad dal", "sambar", "coconut chutney"],
-        instructions: "Steam fermented batter to make idli. Serve with sambar.",
-        image: "https://source.unsplash.com/400x300/?idli",
-        tags: "South Indian, Breakfast, Veg"
       }
     ];
 
@@ -248,7 +252,15 @@
 
     function openModal(recipe) {
       document.getElementById("modalTitle").textContent = recipe.title;
-      document.getElementById("modalIngredients").textContent = recipe.ingredients.join(", ");
+      
+      const ingredientList = document.getElementById("modalIngredients");
+      ingredientList.innerHTML = "";
+      recipe.ingredients.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ingredientList.appendChild(li);
+      });
+
       document.getElementById("modalInstructions").textContent = recipe.instructions;
       modal.style.display = "block";
     }
