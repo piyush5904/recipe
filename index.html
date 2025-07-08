@@ -392,11 +392,11 @@ function displayRecipes(filteredRecipes) {
     const card = document.createElement("div");
     card.className = "recipe-card";
     card.innerHTML = `
-      <h3>${recipe.title}</h3>
-      <p class="tags">${recipe.tags}</p>
-      <p class="info"><strong>Time:</strong> ${recipe.time} mins</p>
-      <p class="info"><strong>Difficulty:</strong> ${recipe.difficulty}</p>
-    `;
+  <h3>${recipe.title.length > 25 ? recipe.title.substring(0, 22) + "..." : recipe.title}</h3>
+  <p class="tags">${recipe.tags}</p>
+  <p class="info"><strong>Time:</strong> ${recipe.time} mins</p>
+  <p class="info"><strong>Difficulty:</strong> ${recipe.difficulty}</p>
+`;
     card.onclick = () => openModal(recipe);
     recipeList.appendChild(card);
   });
