@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Indian Recipe Finder</title>
+  <title>Recipe Finder</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #fff8f0;
+      background-color: #fffdf4;
       color: #333;
     }
 
@@ -28,13 +28,22 @@
       color: #d97706;
     }
 
-    header input {
-      width: 90%;
-      max-width: 500px;
+    .filters {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .filters input,
+    .filters select {
       padding: 10px;
       font-size: 1rem;
       border: 2px solid #ccc;
       border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
     }
 
     .recipe-list {
@@ -108,9 +117,22 @@
 <body>
   <div class="container">
     <header>
-      <h1>🥘 Indian Recipe Finder</h1>
-      <input type="text" id="searchInput" placeholder="Search Indian dishes or ingredients..."/>
+      <h1>🥘 Advanced Indian Recipe Finder</h1>
     </header>
+
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="Search by dish name or ingredient...">
+      <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="North Indian">North Indian</option>
+        <option value="South Indian">South Indian</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Veg">Veg</option>
+        <option value="Non-Veg">Non-Veg</option>
+        <option value="Street Food">Street Food</option>
+        <option value="Spicy">Spicy</option>
+      </select>
+    </div>
 
     <section id="recipeList" class="recipe-list"></section>
 
@@ -131,35 +153,35 @@
         ingredients: ["chicken", "butter", "tomato", "cream", "spices"],
         instructions: "Cook chicken in butter and tomato gravy. Add cream and simmer.",
         image: "https://source.unsplash.com/400x300/?butter-chicken",
-        tags: "North Indian, Non-Veg"
+        tags: "North Indian, Non-Veg, Spicy"
       },
       {
         title: "Palak Paneer",
         ingredients: ["spinach", "paneer", "garlic", "onion", "cream"],
         instructions: "Blend spinach, cook with spices, and add paneer cubes.",
         image: "https://source.unsplash.com/400x300/?palak-paneer",
-        tags: "North Indian, Vegetarian"
+        tags: "North Indian, Veg"
       },
       {
         title: "Masala Dosa",
         ingredients: ["rice", "urad dal", "potato", "mustard seeds", "curry leaves"],
         instructions: "Make dosa batter, cook dosas, fill with spicy mashed potato.",
         image: "https://source.unsplash.com/400x300/?masala-dosa",
-        tags: "South Indian, Breakfast"
+        tags: "South Indian, Breakfast, Veg"
       },
       {
         title: "Chole Bhature",
         ingredients: ["chickpeas", "tomato", "ginger", "flour", "yogurt"],
         instructions: "Cook spicy chickpeas curry. Serve with deep-fried bhature.",
         image: "https://source.unsplash.com/400x300/?chole-bhature",
-        tags: "Punjabi, Spicy"
+        tags: "North Indian, Street Food, Spicy, Veg"
       },
       {
         title: "Biryani",
         ingredients: ["basmati rice", "meat", "onion", "spices", "yogurt"],
         instructions: "Layer cooked rice and meat masala, then dum-cook together.",
         image: "https://source.unsplash.com/400x300/?biryani",
-        tags: "Hyderabadi, Mughlai"
+        tags: "Hyderabadi, Mughlai, Non-Veg, Spicy"
       },
       {
         title: "Rajma Chawal",
@@ -173,7 +195,7 @@
         ingredients: ["flattened rice", "mustard seeds", "onion", "green chili", "lemon"],
         instructions: "Soften poha, sauté with tempering and vegetables.",
         image: "https://source.unsplash.com/400x300/?poha,indian-breakfast",
-        tags: "Maharashtrian, Breakfast"
+        tags: "Maharashtrian, Breakfast, Veg"
       },
       {
         title: "Sambar",
@@ -181,16 +203,36 @@
         instructions: "Cook dal with vegetables and sambar spices.",
         image: "https://source.unsplash.com/400x300/?sambar",
         tags: "South Indian, Veg"
+      },
+      {
+        title: "Pav Bhaji",
+        ingredients: ["potato", "capsicum", "peas", "onion", "bhaji masala"],
+        instructions: "Mash vegetables and cook with spices. Serve with buttered pav.",
+        image: "https://source.unsplash.com/400x300/?pav-bhaji",
+        tags: "Street Food, Veg, Spicy"
+      },
+      {
+        title: "Idli Sambar",
+        ingredients: ["rice", "urad dal", "sambar", "coconut chutney"],
+        instructions: "Steam fermented batter to make idli. Serve with sambar.",
+        image: "https://source.unsplash.com/400x300/?idli",
+        tags: "South Indian, Breakfast, Veg"
       }
     ];
 
     const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
     const recipeList = document.getElementById("recipeList");
     const modal = document.getElementById("modal");
     const closeBtn = document.getElementById("closeBtn");
 
     function displayRecipes(filteredRecipes) {
       recipeList.innerHTML = "";
+      if (filteredRecipes.length === 0) {
+        recipeList.innerHTML = "<p>No recipes found.</p>";
+        return;
+      }
+
       filteredRecipes.forEach((recipe) => {
         const card = document.createElement("div");
         card.className = "recipe-card";
@@ -212,19 +254,23 @@
     }
 
     closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => {
-      if (e.target === modal) modal.style.display = "none";
-    };
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
 
-    searchInput.addEventListener("input", () => {
+    function filterRecipes() {
       const keyword = searchInput.value.toLowerCase();
-      const filtered = recipes.filter(r =>
-        r.title.toLowerCase().includes(keyword) ||
-        r.ingredients.some(i => i.toLowerCase().includes(keyword))
-      );
-      displayRecipes(filtered);
-    });
+      const category = categoryFilter.value;
 
+      const filtered = recipes.filter(recipe =>
+        (recipe.title.toLowerCase().includes(keyword) ||
+         recipe.ingredients.some(i => i.toLowerCase().includes(keyword)))
+        && (category === "all" || recipe.tags.toLowerCase().includes(category.toLowerCase()))
+      );
+
+      displayRecipes(filtered);
+    }
+
+    searchInput.addEventListener("input", filterRecipes);
+    categoryFilter.addEventListener("change", filterRecipes);
     document.addEventListener("DOMContentLoaded", () => displayRecipes(recipes));
   </script>
 </body>
