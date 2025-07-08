@@ -1,133 +1,231 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-gray-100">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Recipe Finder</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Indian Recipe Finder</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff8f0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #d97706;
+    }
+
+    header input {
+      width: 90%;
+      max-width: 500px;
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+
+    .recipe-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .recipe-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+
+    .recipe-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .recipe-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .recipe-card h3 {
+      margin-top: 0.5rem;
+      color: #333;
+    }
+
+    .recipe-card .tags {
+      font-size: 0.8rem;
+      color: #777;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      max-width: 600px;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px; right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .modal-content {
+        width: 90%;
+      }
     }
   </style>
 </head>
-<body class="text-gray-800 min-h-screen">
+<body>
+  <div class="container">
+    <header>
+      <h1>🥘 Indian Recipe Finder</h1>
+      <input type="text" id="searchInput" placeholder="Search Indian dishes or ingredients..."/>
+    </header>
 
-  <!-- Header -->
-  <header class="bg-white shadow-md p-6 text-center">
-    <h1 class="text-4xl font-bold text-blue-600">Recipe Finder</h1>
-    <p class="text-sm text-gray-500 mt-1">Search your favorite recipes by name or ingredients</p>
-  </header>
+    <section id="recipeList" class="recipe-list"></section>
 
-  <!-- Search Box -->
-  <div class="p-4 max-w-xl mx-auto">
-    <input
-      type="text"
-      id="search-input"
-      placeholder="Search by name or ingredient..."
-      class="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
-    />
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span id="closeBtn" class="close">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p><strong>Ingredients:</strong> <span id="modalIngredients"></span></p>
+        <p><strong>Instructions:</strong> <span id="modalInstructions"></span></p>
+      </div>
+    </div>
   </div>
 
-  <!-- Recipe List -->
-  <div id="recipe-list" class="grid md:grid-cols-2 gap-4 p-4 max-w-6xl mx-auto">
-    <!-- Recipes will be added here by JS -->
-  </div>
-
-  <!-- JavaScript -->
   <script>
     const recipes = [
       {
-        title: "Paneer Butter Masala",
-        ingredients: ["paneer", "tomato", "cream", "spices", "butter"],
-        steps: "Cook paneer in buttery tomato gravy with cream and spices.",
-      },
-      {
-        title: "Veg Biryani",
-        ingredients: ["rice", "vegetables", "spices", "yogurt", "mint"],
-        steps: "Layer rice and vegetables cooked with spices and herbs.",
-      },
-      {
-        title: "Aloo Paratha",
-        ingredients: ["potato", "flour", "spices", "coriander", "onion"],
-        steps: "Stuff mashed spiced potatoes into dough and roast with ghee.",
-      },
-      {
-        title: "Masala Dosa",
-        ingredients: ["rice", "urad dal", "potato", "onion", "mustard seeds"],
-        steps: "Make dosa batter, cook crispy, and fill with potato masala.",
-      },
-      {
-        title: "Chole Bhature",
-        ingredients: ["chickpeas", "flour", "spices", "yogurt", "onion"],
-        steps: "Boil chickpeas and cook in spicy curry. Serve with fried bread.",
+        title: "Butter Chicken",
+        ingredients: ["chicken", "butter", "tomato", "cream", "spices"],
+        instructions: "Cook chicken in butter and tomato gravy. Add cream and simmer.",
+        image: "https://source.unsplash.com/400x300/?butter-chicken",
+        tags: "North Indian, Non-Veg"
       },
       {
         title: "Palak Paneer",
-        ingredients: ["spinach", "paneer", "onion", "garlic", "spices"],
-        steps: "Puree spinach and cook with spices. Add paneer cubes.",
+        ingredients: ["spinach", "paneer", "garlic", "onion", "cream"],
+        instructions: "Blend spinach, cook with spices, and add paneer cubes.",
+        image: "https://source.unsplash.com/400x300/?palak-paneer",
+        tags: "North Indian, Vegetarian"
       },
       {
-        title: "Idli Sambhar",
-        ingredients: ["rice", "dal", "vegetables", "tamarind", "spices"],
-        steps: "Steam fermented batter to make idlis and serve with sambhar.",
+        title: "Masala Dosa",
+        ingredients: ["rice", "urad dal", "potato", "mustard seeds", "curry leaves"],
+        instructions: "Make dosa batter, cook dosas, fill with spicy mashed potato.",
+        image: "https://source.unsplash.com/400x300/?masala-dosa",
+        tags: "South Indian, Breakfast"
+      },
+      {
+        title: "Chole Bhature",
+        ingredients: ["chickpeas", "tomato", "ginger", "flour", "yogurt"],
+        instructions: "Cook spicy chickpeas curry. Serve with deep-fried bhature.",
+        image: "https://source.unsplash.com/400x300/?chole-bhature",
+        tags: "Punjabi, Spicy"
+      },
+      {
+        title: "Biryani",
+        ingredients: ["basmati rice", "meat", "onion", "spices", "yogurt"],
+        instructions: "Layer cooked rice and meat masala, then dum-cook together.",
+        image: "https://source.unsplash.com/400x300/?biryani",
+        tags: "Hyderabadi, Mughlai"
       },
       {
         title: "Rajma Chawal",
-        ingredients: ["kidney beans", "rice", "onion", "tomato", "spices"],
-        steps: "Cook kidney beans in onion-tomato masala and serve with rice.",
+        ingredients: ["kidney beans", "onion", "tomato", "spices", "rice"],
+        instructions: "Cook rajma in onion-tomato gravy. Serve with steamed rice.",
+        image: "https://source.unsplash.com/400x300/?rajma-chawal",
+        tags: "North Indian, Veg"
       },
       {
-        title: "Pav Bhaji",
-        ingredients: ["potato", "capsicum", "peas", "onion", "butter"],
-        steps: "Mash boiled vegetables with spices and serve with buttered pav.",
+        title: "Poha",
+        ingredients: ["flattened rice", "mustard seeds", "onion", "green chili", "lemon"],
+        instructions: "Soften poha, sauté with tempering and vegetables.",
+        image: "https://source.unsplash.com/400x300/?poha,indian-breakfast",
+        tags: "Maharashtrian, Breakfast"
       },
       {
-        title: "Kadai Mushroom",
-        ingredients: ["mushroom", "capsicum", "tomato", "onion", "spices"],
-        steps: "Stir-fry mushrooms with bell peppers and onion-tomato masala.",
-      },
-      {
-        title: "Upma",
-        ingredients: ["semolina", "mustard seeds", "onion", "vegetables", "ghee"],
-        steps: "Roast semolina and cook with sautéed vegetables and spices.",
-      },
-      {
-        title: "Dhokla",
-        ingredients: ["besan", "curd", "mustard seeds", "hing", "green chili"],
-        steps: "Steam fermented besan batter and temper with mustard seeds.",
+        title: "Sambar",
+        ingredients: ["toor dal", "vegetables", "tamarind", "mustard seeds", "sambar powder"],
+        instructions: "Cook dal with vegetables and sambar spices.",
+        image: "https://source.unsplash.com/400x300/?sambar",
+        tags: "South Indian, Veg"
       }
     ];
 
-    function displayRecipes(recipeArray) {
-      const list = document.getElementById("recipe-list");
-      list.innerHTML = "";
-      if (recipeArray.length === 0) {
-        list.innerHTML = `<p class="text-center col-span-full text-gray-500">No recipes found.</p>`;
-        return;
-      }
-      recipeArray.forEach((recipe) => {
-        list.innerHTML += `
-          <div class="bg-white rounded-xl p-5 shadow-md border hover:shadow-lg transition">
-            <h2 class="text-xl font-bold text-blue-700 mb-1">${recipe.title}</h2>
-            <p class="text-sm text-gray-600 mb-2"><b>Ingredients:</b> ${recipe.ingredients.join(", ")}</p>
-            <p class="text-sm"><b>Steps:</b> ${recipe.steps}</p>
-          </div>`;
+    const searchInput = document.getElementById("searchInput");
+    const recipeList = document.getElementById("recipeList");
+    const modal = document.getElementById("modal");
+    const closeBtn = document.getElementById("closeBtn");
+
+    function displayRecipes(filteredRecipes) {
+      recipeList.innerHTML = "";
+      filteredRecipes.forEach((recipe) => {
+        const card = document.createElement("div");
+        card.className = "recipe-card";
+        card.innerHTML = `
+          <img src="${recipe.image}" alt="${recipe.title}">
+          <h3>${recipe.title}</h3>
+          <p class="tags">${recipe.tags}</p>
+        `;
+        card.onclick = () => openModal(recipe);
+        recipeList.appendChild(card);
       });
     }
 
-    // Search functionality
-    document.getElementById("search-input").addEventListener("input", function () {
-      const query = this.value.toLowerCase().trim();
-      const filtered = recipes.filter((r) =>
-        r.title.toLowerCase().includes(query) ||
-        r.ingredients.some((ing) => ing.toLowerCase().includes(query))
+    function openModal(recipe) {
+      document.getElementById("modalTitle").textContent = recipe.title;
+      document.getElementById("modalIngredients").textContent = recipe.ingredients.join(", ");
+      document.getElementById("modalInstructions").textContent = recipe.instructions;
+      modal.style.display = "block";
+    }
+
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    };
+
+    searchInput.addEventListener("input", () => {
+      const keyword = searchInput.value.toLowerCase();
+      const filtered = recipes.filter(r =>
+        r.title.toLowerCase().includes(keyword) ||
+        r.ingredients.some(i => i.toLowerCase().includes(keyword))
       );
       displayRecipes(filtered);
     });
 
-    // Initial load
-    displayRecipes(recipes);
+    document.addEventListener("DOMContentLoaded", () => displayRecipes(recipes));
   </script>
 </body>
 </html>
