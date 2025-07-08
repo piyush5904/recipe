@@ -162,6 +162,287 @@
   </div>
 </div>
 
-<script src="recipes.js"></script>
+<script>
+// Full database of 20 detailed Indian recipes
+const recipes = [<script>
+const recipes = [
+  {
+    title: "Butter Chicken",
+    ingredients: ["Chicken", "Butter", "Tomato puree", "Cream", "Garam masala", "Salt"],
+    instructions: `1. Marinate chicken in yogurt, turmeric, chili powder, and salt for at least 30 minutes.
+2. Heat butter in a pan and sauté onions until golden.
+3. Add tomato puree, cook for 10 minutes until oil separates.
+4. Add marinated chicken and cook for 20 minutes.
+5. Stir in cream and garam masala. Simmer and serve hot.`,
+    tags: "North Indian, Non-Veg, Spicy",
+    difficulty: "Medium",
+    time: 45
+  },
+  {
+    title: "Masala Dosa",
+    ingredients: ["Dosa batter", "Boiled potatoes", "Onion", "Mustard seeds", "Curry leaves"],
+    instructions: `1. Heat oil, add mustard seeds and curry leaves.
+2. Sauté onions, add turmeric and mashed potatoes.
+3. Cook for 5 mins. Spread mixture on dosa and fold.
+4. Serve hot with chutney and sambar.`,
+    tags: "South Indian, Breakfast, Veg",
+    difficulty: "Medium",
+    time: 30
+  },
+  {
+    title: "Rajma Chawal",
+    ingredients: ["Rajma beans", "Tomato", "Onion", "Spices", "Rice"],
+    instructions: `1. Soak rajma overnight and boil until soft.
+2. Prepare onion-tomato masala with spices.
+3. Mix boiled rajma and simmer for 20 mins.
+4. Serve with steamed basmati rice.`,
+    tags: "North Indian, Veg",
+    difficulty: "Easy",
+    time: 60
+  },
+  {
+    title: "Aloo Paratha",
+    ingredients: ["Wheat flour", "Boiled potatoes", "Spices"],
+    instructions: `1. Mash potatoes and mix with chili, coriander, cumin.
+2. Stuff into rolled dough and seal.
+3. Roll out again and cook on tawa with ghee.
+4. Serve with curd or pickle.`,
+    tags: "North Indian, Breakfast, Veg",
+    difficulty: "Easy",
+    time: 25
+  },
+  {
+    title: "Chicken Biryani",
+    ingredients: ["Basmati rice", "Chicken", "Yogurt", "Spices", "Onion"],
+    instructions: `1. Marinate chicken in curd and biryani masala.
+2. Fry onions till brown and add marinated chicken.
+3. Partially cook rice and layer it with chicken.
+4. Dum cook for 25 minutes. Serve hot with raita.`,
+    tags: "Non-Veg, Spicy",
+    difficulty: "Hard",
+    time: 90
+  },
+  {
+    title: "Paneer Butter Masala",
+    ingredients: ["Paneer", "Tomato puree", "Butter", "Cream", "Spices"],
+    instructions: `1. Sauté ginger-garlic in butter, add tomato puree.
+2. Cook until thick and add cream and spices.
+3. Add paneer cubes and simmer for 10 mins.`,
+    tags: "North Indian, Veg",
+    difficulty: "Medium",
+    time: 35
+  },
+  {
+    title: "Poha",
+    ingredients: ["Flattened rice", "Onions", "Mustard seeds", "Peanuts", "Curry leaves"],
+    instructions: `1. Wash poha and keep aside.
+2. Sauté onions, mustard seeds, curry leaves.
+3. Add poha, turmeric, salt, lemon juice.`,
+    tags: "Breakfast, Veg",
+    difficulty: "Easy",
+    time: 15
+  },
+  {
+    title: "Chole Bhature",
+    ingredients: ["Chickpeas", "Spices", "Flour", "Yogurt"],
+    instructions: `1. Boil chickpeas and prepare spicy gravy.
+2. Knead dough with flour and yogurt.
+3. Deep fry into bhature and serve with chole.`,
+    tags: "North Indian, Veg",
+    difficulty: "Medium",
+    time: 70
+  },
+  {
+    title: "Mutton Rogan Josh",
+    ingredients: ["Mutton", "Yogurt", "Spices", "Onion", "Ginger garlic paste"],
+    instructions: `1. Marinate mutton in yogurt and spices.
+2. Cook onions and add marinated meat.
+3. Simmer until meat is tender.`,
+    tags: "Non-Veg, Spicy",
+    difficulty: "Hard",
+    time: 90
+  },
+  {
+    title: "Idli Sambar",
+    ingredients: ["Idli batter", "Toor dal", "Vegetables", "Spices"],
+    instructions: `1. Steam idlis in a steamer.
+2. Boil dal, add veggies and sambar spices.
+3. Serve hot with idli and chutney.`,
+    tags: "South Indian, Veg, Breakfast",
+    difficulty: "Medium",
+    time: 40
+  },
+  {
+    title: "Palak Paneer",
+    ingredients: ["Spinach", "Paneer", "Onion", "Tomato", "Spices"],
+    instructions: `1. Blanch and puree spinach.
+2. Sauté onions, tomatoes, add spinach puree.
+3. Add paneer cubes and cook for 10 mins.`,
+    tags: "Veg, Healthy",
+    difficulty: "Medium",
+    time: 30
+  },
+  {
+    title: "Egg Curry",
+    ingredients: ["Boiled eggs", "Onion", "Tomato", "Spices"],
+    instructions: `1. Sauté onions and tomatoes with spices.
+2. Add water and place boiled eggs.
+3. Simmer for 15 mins and serve.`,
+    tags: "Non-Veg, Spicy",
+    difficulty: "Easy",
+    time: 35
+  },
+  {
+    title: "Fish Fry",
+    ingredients: ["Fish", "Spices", "Lemon", "Oil"],
+    instructions: `1. Marinate fish in lemon, salt, and spices.
+2. Shallow fry until crispy on both sides.`,
+    tags: "Non-Veg",
+    difficulty: "Easy",
+    time: 25
+  },
+  {
+    title: "Dhokla",
+    ingredients: ["Gram flour", "Yogurt", "Mustard seeds", "Curry leaves"],
+    instructions: `1. Make batter using gram flour and yogurt.
+2. Steam the mixture until fluffy.
+3. Temper with mustard seeds and curry leaves.`,
+    tags: "Snack, Veg",
+    difficulty: "Medium",
+    time: 30
+  },
+  {
+    title: "Baingan Bharta",
+    ingredients: ["Brinjal", "Onion", "Tomato", "Garlic"],
+    instructions: `1. Roast brinjal and mash it.
+2. Sauté onions, garlic, tomatoes.
+3. Mix mashed brinjal and cook.`,
+    tags: "Veg",
+    difficulty: "Medium",
+    time: 30
+  },
+  {
+    title: "Methi Thepla",
+    ingredients: ["Wheat flour", "Fenugreek leaves", "Spices"],
+    instructions: `1. Knead dough with methi and spices.
+2. Roll into thin theplas and cook on tawa.`,
+    tags: "Gujarati, Veg",
+    difficulty: "Easy",
+    time: 30
+  },
+  {
+    title: "Kadhi Pakora",
+    ingredients: ["Gram flour", "Yogurt", "Spices", "Onion"],
+    instructions: `1. Make pakoras from onion and besan.
+2. Prepare kadhi using yogurt and besan.
+3. Simmer kadhi and add pakoras.`,
+    tags: "North Indian, Veg",
+    difficulty: "Medium",
+    time: 45
+  },
+  {
+    title: "Pav Bhaji",
+    ingredients: ["Potatoes", "Cauliflower", "Peas", "Spices", "Pav buns"],
+    instructions: `1. Boil veggies and mash.
+2. Cook with spices and butter.
+3. Toast pav and serve with bhaji.`,
+    tags: "Mumbai, Veg",
+    difficulty: "Easy",
+    time: 40
+  },
+  {
+    title: "Tandoori Chicken",
+    ingredients: ["Chicken", "Yogurt", "Tandoori masala", "Lemon"],
+    instructions: `1. Marinate chicken with all ingredients overnight.
+2. Grill or bake until charred.
+3. Serve with mint chutney.`,
+    tags: "Non-Veg, Spicy",
+    difficulty: "Medium",
+    time: 60
+  },
+  {
+    title: "Vegetable Pulao",
+    ingredients: ["Rice", "Mixed vegetables", "Spices", "Onion"],
+    instructions: `1. Sauté onions and spices.
+2. Add veggies and rice.
+3. Cook until rice is done.`,
+    tags: "Veg, One-Pot",
+    difficulty: "Easy",
+    time: 30
+  }
+];
+</script>
+];
+</script>
+
+<script>
+// (Remaining unchanged JS logic that was already in your original code)
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const difficultyFilter = document.getElementById("difficultyFilter");
+const timeFilter = document.getElementById("timeFilter");
+const recipeList = document.getElementById("recipeList");
+const modal = document.getElementById("modal");
+const closeBtn = document.getElementById("closeBtn");
+
+function displayRecipes(filteredRecipes) {
+  recipeList.innerHTML = "";
+  if (filteredRecipes.length === 0) {
+    recipeList.innerHTML = "<p>No recipes found.</p>";
+    return;
+  }
+  filteredRecipes.forEach(recipe => {
+    const card = document.createElement("div");
+    card.className = "recipe-card";
+    card.innerHTML = `
+      <h3>${recipe.title}</h3>
+      <p class="tags">${recipe.tags}</p>
+      <p class="info"><strong>Time:</strong> ${recipe.time} mins</p>
+      <p class="info"><strong>Difficulty:</strong> ${recipe.difficulty}</p>
+    `;
+    card.onclick = () => openModal(recipe);
+    recipeList.appendChild(card);
+  });
+}
+
+function openModal(recipe) {
+  document.getElementById("modalTitle").textContent = recipe.title;
+  const ingredients = document.getElementById("modalIngredients");
+  ingredients.innerHTML = "";
+  recipe.ingredients.forEach(ing => {
+    const li = document.createElement("li");
+    li.textContent = ing;
+    ingredients.appendChild(li);
+  });
+  document.getElementById("modalInstructions").textContent = recipe.instructions;
+  modal.style.display = "block";
+}
+
+closeBtn.onclick = () => modal.style.display = "none";
+window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+
+function filterRecipes() {
+  const keyword = searchInput.value.toLowerCase();
+  const category = categoryFilter.value;
+  const difficulty = difficultyFilter.value;
+  const time = parseInt(timeFilter.value);
+
+  const filtered = recipes.filter(r => {
+    const matchKeyword = r.title.toLowerCase().includes(keyword) || r.ingredients.some(i => i.toLowerCase().includes(keyword));
+    const matchTag = category === "all" || r.tags.toLowerCase().includes(category.toLowerCase());
+    const matchDiff = difficulty === "all" || r.difficulty === difficulty;
+    const matchTime = isNaN(time) || (time === 30 && r.time <= 30) || (time === 60 && r.time <= 60) || (time === 61 && r.time > 60);
+    return matchKeyword && matchTag && matchDiff && matchTime;
+  });
+
+  displayRecipes(filtered);
+}
+
+searchInput.addEventListener("input", filterRecipes);
+categoryFilter.addEventListener("change", filterRecipes);
+difficultyFilter.addEventListener("change", filterRecipes);
+timeFilter.addEventListener("change", filterRecipes);
+document.addEventListener("DOMContentLoaded", () => displayRecipes(recipes));
+</script>
 </body>
 </html>
